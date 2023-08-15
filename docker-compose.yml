@@ -1,0 +1,53 @@
+version: "3"
+services:
+  mysql:
+    container_name: mysql
+    build: ./mysql/
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/db:/docker-entrypoint-initdb.d
+      - ./mysql/conf.d:/etc/mysql/conf.d
+    env_file:
+      - ./mysql/local.env
+    tty: true
+
+  api:
+    depends_on:
+      - mysql
+    container_name: fast_api
+    build: ./api
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./api:/app
+    ports:
+      - 8000:8000
+    env_file:
+      - ./api/local.env
+
+  socket:
+    depends_on:
+      - mysql
+    container_name: fast_socket_api
+    build: ./socket
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./socket:/app
+    ports:
+      - 8001:8000
+    env_file:
+      - ./socket/local.env
+
+  cron:
+    depends_on:
+      - socket
+    container_name: cron
+    build: ./cron
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./cron:/app
+    env_file:
+      - ./cron/local.env
