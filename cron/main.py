@@ -10,10 +10,11 @@ import re
 app = FastAPI()
 
 @app.on_event("startup")
-@repeat_every(seconds=1, wait_first=True)
+@repeat_every(seconds=10, wait_first=True)
 async def periodic():
-    ws = create_connection("ws://socket:8000/ws")
-    ws.send(testBMFD())
+    ws = create_connection("ws://socket:8000/ws?token=cron")
+    ws.send("""{"to" : "1", "message" : "Hey."}""")
+    ws.send("""{"to" : "2", "message" : "Hey Hey."}""")
     ws.close()
 
 def testBMFD():

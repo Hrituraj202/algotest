@@ -8,6 +8,9 @@ from user import Auth, SignInRequestModel, SignUpRequestModel, UserAuthResponseM
 
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
+
+from redis import Redis
+
 import json
 
 import traceback
@@ -34,6 +37,8 @@ app.add_middleware(
 security = HTTPBearer()
 auth_handler = Auth()
 
+redis = Redis(host='redis')
+
 
 ###############################
 ########## Auth APIs ##########
@@ -41,6 +46,8 @@ auth_handler = Auth()
 
 @app.get('/')
 def home():
+    redis.incr('hits')
+    print(redis.get('hits'))
     return JSONResponse(status_code=200, content={'msg': 'welcome to AlgoTest'})
 
 @app.post('/v1/signup', response_model=UserAuthResponseModel)
@@ -60,6 +67,14 @@ def signin_api(user_details: SignInRequestModel):
     This sign-in API allow you to obtain your access token.
     """
     user = signin_user(user_details.email, user_details.password)
+
+    if not redis.exists('user:'+str(user['id'])):
+        redis.hset('user:'+str(user['id']), mapping={
+            'name': user['first_name'],
+            "threshold": 1
+        })
+    # print(redis.hgetall('user:'+str(user['id'])))
+
     access_token = auth_handler.encode_token(user['email'])
     refresh_token = auth_handler.encode_refresh_token(user['email'])
     return JSONResponse(status_code=200, content={'token': {'access_token': access_token, 'refresh_token': refresh_token}, 'user': user})
@@ -269,6 +284,6 @@ def get_trades():
     except (ConnectionError, Timeout, TooManyRedirects) as e:
         print(e)
 
-@app.post('/sendmessage')
-def send_message():
-    return {"msg":"welcome"}
+@app.get('/test/{user_id}')
+def send_message(user_id: int):
+    return redis.hgetall('user:'+str(user_id))
