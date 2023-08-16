@@ -5,6 +5,7 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from user import Auth, SignInRequestModel, SignUpRequestModel, UserAuthResponseModel, UserUpdateRequestModel, UserResponseModel, register_user, signin_user, update_user, get_all_users, get_user_by_id
+from trade import TradeUpdateRequestModel, TradeResponseModel, add_trade, get_all_trades, get_trade_by_id, get_trades_by_user_id
 
 from requests import Request, Session
 from requests.exceptions import ConnectionError, Timeout, TooManyRedirects
@@ -70,7 +71,6 @@ def signin_api(user_details: SignInRequestModel):
 
     if not redis.exists('user:'+str(user['id'])):
         redis.hset('user:'+str(user['id']), mapping={
-            'name': user['first_name'],
             "threshold": 1
         })
     # print(redis.hgetall('user:'+str(user['id'])))
@@ -132,6 +132,20 @@ def update_user_api(user_details: UserUpdateRequestModel, credentials: HTTPAutho
         return JSONResponse(status_code=200, content=jsonable_encoder(user))
     return JSONResponse(status_code=401, content={'error': 'Faild to authorize'})
 
+@app.get('/v1/user/{user_id}/trades', response_model=TradeResponseModel)
+def get_user_trades(user_id: int, credentials: HTTPAuthorizationCredentials = Security(security)):
+    """
+    This user API allow you to fetch specific user trade data.
+    """
+    try:
+        token = credentials.credentials
+        if (auth_handler.decode_token(token)):
+            trades = get_trades_by_user_id(user_id)
+            return JSONResponse(status_code=200, content=jsonable_encoder(trades))
+        return JSONResponse(status_code=401, content={'error': 'Faild to authorize'})
+    except Exception as e:
+        # print(traceback.format_exc())
+        print("An exception occurred ", e)
 
 ###############################
 ########## Test APIs ##########
