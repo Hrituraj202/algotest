@@ -1,6 +1,8 @@
 from .processdata import ProcessDataService
+from .algorithm import AlgoService
 
 data_handler = ProcessDataService()
+algo_handler = AlgoService()
 
 class ArbitrageService():
 
@@ -13,7 +15,22 @@ class ArbitrageService():
     def callTwoPointer(self):
         simulateTest = True
         processedData = data_handler.handle(simulateTest)
+        processedData = algo_handler.handle(processedData)
         return processedData
+
+    def handleThreshold(self, data, threshold):
+        try:
+            finalData = {}
+
+            for currency, exchange_value_dict in data.items():
+
+                for pair, trade_value in exchange_value_dict.items():
+                    if float(trade_value.split(',')[-1]) > float(threshold):
+                        finalData[currency] = {pair : trade_value}
+            
+            return finalData
+        except Exception as e:
+            print(e)
 
     def callBMFD(self):
 

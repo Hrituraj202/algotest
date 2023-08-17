@@ -2,8 +2,9 @@ import random
 
 def apply_random_percentage(number):
     percentage_range = 10
-    if not (0 <= percentage_range <= 100):
-        raise ValueError("Percentage range must be between 0 and 100.")
+
+    if 0 == random.choice([0, 0, 0, 0, 0, 0, 1]):
+        return number
 
     operation = random.choice(["add", "subtract"])
     percentage = random.uniform(0, percentage_range)
@@ -14,4 +15,4 @@ def apply_random_percentage(number):
     else:
         result = number - change_amount
 
-    return operation, result
+    return result

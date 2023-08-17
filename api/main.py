@@ -301,3 +301,37 @@ def get_trades():
 @app.get('/test/{user_id}')
 def send_message(user_id: int):
     return redis.hgetall('user:'+str(user_id))
+
+@app.get('/find_pairs')
+def find_pairs_optimized():
+
+    exchange_values = {
+        "Binance": 1800.5320387732727,
+        "Coinbase": 1800.5320387732727,
+        "Kraken": 1900.5320387732727,
+        "Bitfinex": 1500.5320387732727,
+        "Gemini": 1800.5320387732727
+    }
+    pairs = []
+    stack = []
+
+    # exchange_values.items() produce tuples
+    sorted_exchanges = sorted(exchange_values.items(), key=lambda item: item[1])
+
+    for (exchange, value) in sorted_exchanges:
+        while stack and exchange_values[stack[-1]] < value:
+            i = stack.pop()
+            pairs.append((i, exchange))
+
+        stack.append(exchange)
+
+    result_dict = {}
+    for pair in pairs:
+        value1 = exchange_values[pair[0]]
+        value2 = exchange_values[pair[1]]
+        key = f"{pair[0]},{pair[1]}"
+        result_dict[key] = f"{value1},{value2},{value2-value1}"
+
+    print(result_dict)
+
+    return 1
