@@ -9,7 +9,8 @@ import json
 
 class ApiService():
     secret = os.getenv("API_SECRET_STRING")
-    baseUrl = "https://pro-api.coinmarketcap.com"
+    coinMarketCapUrl = "https://pro-api.coinmarketcap.com"
+    ownBaseUrl = "http://api:8000"
 
     headers = {
         'Accepts': 'application/json',
@@ -32,11 +33,12 @@ class ApiService():
             print(e)
 
     def callExchangeAssets(self, exchange_id):
+
+        url = self.coinMarketCapUrl + "/v1/exchange/assets"
+
         parameters = {
             'id' : exchange_id
         }
-
-        url = self.baseUrl + "/v1/exchange/assets"
 
         try:
             response = self.session.get(url, params=parameters)
@@ -11039,5 +11041,46 @@ class ApiService():
                                     }
                                 ]}""")
             return data
+        except Exception as e:
+            print(e)
+
+    def createTrade(self, user_id, requestData):
+        try:
+            url = self.ownBaseUrl + "/v1/user/"+str(user_id)+"/trades"
+            for currency, exchange_value_dict in requestData.items():
+                for pair, trade_value in exchange_value_dict.items():
+                    try:
+
+                        exchangeData = {}
+                        exchange_names = pair.split(',')
+                        prices = trade_value.split(',')
+            
+                        for exchange, price in zip(exchange_names, prices):
+                            exchangeData[exchange] = {
+                                "name": exchange,
+                                "currency": currency,
+                                "price": price
+                            }
+
+                        parameters = {
+                            "user_id" : user_id,
+                            "asset": str(currency),
+                            "exchanges": json.dumps(exchangeData),
+                            "profit": trade_value.split(',')[-1],
+                            "timestamp": datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
+                        }
+
+                        response = self.session.post(url, json=parameters)
+
+                        if response.status_code == 422:
+                            print("Validation error:")
+                            print(response.content)
+                        else:
+                            print("Other status code:", response.status_code)
+
+                    except (ConnectionError, Timeout, TooManyRedirects) as e:
+                        print(e)
+            
+            return True
         except Exception as e:
             print(e)

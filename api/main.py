@@ -132,6 +132,14 @@ def update_user_api(user_details: UserUpdateRequestModel, credentials: HTTPAutho
         return JSONResponse(status_code=200, content=jsonable_encoder(user))
     return JSONResponse(status_code=401, content={'error': 'Faild to authorize'})
 
+@app.post("/v1/user/{user_id}/trades", response_model=TradeResponseModel)
+def create_trade_api(trade_details: TradeUpdateRequestModel):
+    """
+    This trade create API allow you to create trade data.
+    """
+    trade = add_trade(trade_details)
+    return JSONResponse(status_code=200, content=jsonable_encoder(trade))
+
 @app.get('/v1/user/{user_id}/trades', response_model=TradeResponseModel)
 def get_user_trades(user_id: int, credentials: HTTPAuthorizationCredentials = Security(security)):
     """
@@ -141,6 +149,7 @@ def get_user_trades(user_id: int, credentials: HTTPAuthorizationCredentials = Se
         token = credentials.credentials
         if (auth_handler.decode_token(token)):
             trades = get_trades_by_user_id(user_id)
+            print(trades)
             return JSONResponse(status_code=200, content=jsonable_encoder(trades))
         return JSONResponse(status_code=401, content={'error': 'Faild to authorize'})
     except Exception as e:
@@ -334,4 +343,25 @@ def find_pairs_optimized():
 
     print(result_dict)
 
+    return 1
+
+
+@app.get('/solve_format')
+def solve_format():
+    input_data = {'ETH': {'Gemini,Binance': '1722,1800,78'}}
+
+    output_data = {}
+
+    for exchanges, prices in input_data['ETH'].items():
+        exchange_names = exchanges.split(',')
+        prices = prices.split(',')
+        
+        for exchange, price in zip(exchange_names, prices):
+            output_data[exchange] = {
+                "name": exchange,
+                "currency": "ETH",
+                "price": price
+            }
+
+    print(output_data)
     return 1
