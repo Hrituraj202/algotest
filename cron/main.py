@@ -18,7 +18,7 @@ arbitrage_handler = ArbitrageService()
 api_handler = ApiService()
 
 @app.on_event("startup")
-@repeat_every(seconds=100, wait_first=True)
+@repeat_every(seconds=180, wait_first=True)
 async def periodic():
     try:
         data = arbitrage_handler.handle(1)

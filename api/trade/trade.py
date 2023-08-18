@@ -59,6 +59,8 @@ def get_trades_by_user_id(id: int):
             trade.timestamp
         FROM trade 
         WHERE user_id = %s
+        order by id desc
+        limit 15 
         """, (id))
     return trade
 

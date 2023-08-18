@@ -160,208 +160,208 @@ def get_user_trades(user_id: int, credentials: HTTPAuthorizationCredentials = Se
 ########## Test APIs ##########
 ###############################
 
-@app.get('/secret')
-def secret_data_api(credentials: HTTPAuthorizationCredentials = Security(security)):
-    """
-    This secret API is just for testing. Need access token to access this API.
-    """
-    token = credentials.credentials
-    if (auth_handler.decode_token(token)):
-        return 'Top Secret data only authorized users can access this info'
+# @app.get('/secret')
+# def secret_data_api(credentials: HTTPAuthorizationCredentials = Security(security)):
+#     """
+#     This secret API is just for testing. Need access token to access this API.
+#     """
+#     token = credentials.credentials
+#     if (auth_handler.decode_token(token)):
+#         return 'Top Secret data only authorized users can access this info'
 
 
-@app.get('/not-secret')
-def not_secret_data_api():
-    """
-    This not-secret API is just for testing.
-    """
-    return 'Not secret data'
+# @app.get('/not-secret')
+# def not_secret_data_api():
+#     """
+#     This not-secret API is just for testing.
+#     """
+#     return 'Not secret data'
 
-@app.get('/exchange/listings')
-def get_trades():
+# @app.get('/exchange/listings')
+# def get_trades():
 
-    url = 'https://pro-api.coinmarketcap.com/v1/exchange/listings/latest'
+#     url = 'https://pro-api.coinmarketcap.com/v1/exchange/listings/latest'
 
-    headers = {
-        'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
-    }
+#     headers = {
+#         'Accepts': 'application/json',
+#         'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
+#     }
 
-    session = Session()
-    session.headers.update(headers)
+#     session = Session()
+#     session.headers.update(headers)
 
-    parameters = {
-        # 'id' : 8670,
-        # 'slug' : "binance"
-    }
+#     parameters = {
+#         # 'id' : 8670,
+#         # 'slug' : "binance"
+#     }
 
-    try:
-        response = session.get(url, params=parameters)
-        data = json.loads(response.text)
-        print(data)
-        return data
-    except (ConnectionError, Timeout, TooManyRedirects) as e:
-        print(e)
+#     try:
+#         response = session.get(url, params=parameters)
+#         data = json.loads(response.text)
+#         print(data)
+#         return data
+#     except (ConnectionError, Timeout, TooManyRedirects) as e:
+#         print(e)
 
-@app.get('/cryptocurrency/market-pairs')
-def get_trades():
+# @app.get('/cryptocurrency/market-pairs')
+# def get_trades():
 
-    url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/market-pairs/latest'
+#     url = 'https://pro-api.coinmarketcap.com/v2/cryptocurrency/market-pairs/latest'
 
-    headers = {
-        'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
-    }
+#     headers = {
+#         'Accepts': 'application/json',
+#         'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
+#     }
 
-    session = Session()
-    session.headers.update(headers)
+#     session = Session()
+#     session.headers.update(headers)
 
-    parameters = {
-        'id' : 9654,
-        # 'slug' : "binance"
-    }
+#     parameters = {
+#         'id' : 9654,
+#         # 'slug' : "binance"
+#     }
 
-    try:
-        response = session.get(url, params=parameters)
-        data = json.loads(response.text)
-        print(data)
-        return data
-    except (ConnectionError, Timeout, TooManyRedirects) as e:
-        print(e)
+#     try:
+#         response = session.get(url, params=parameters)
+#         data = json.loads(response.text)
+#         print(data)
+#         return data
+#     except (ConnectionError, Timeout, TooManyRedirects) as e:
+#         print(e)
 
-@app.get('/exchange/assets')
-def get_trades():
+# @app.get('/exchange/assets')
+# def get_trades():
 
-    url = 'https://pro-api.coinmarketcap.com/v1/exchange/assets'
+#     url = 'https://pro-api.coinmarketcap.com/v1/exchange/assets'
 
-    headers = {
-        'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
-    }
+#     headers = {
+#         'Accepts': 'application/json',
+#         'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
+#     }
 
-    session = Session()
-    session.headers.update(headers)
+#     session = Session()
+#     session.headers.update(headers)
 
-    parameters = {
-        'id' : 270,
-        # 'slug' : "binance"
-    }
+#     parameters = {
+#         'id' : 270,
+#         # 'slug' : "binance"
+#     }
 
-    try:
-        response = session.get(url, params=parameters)
-        data = json.loads(response.text)
-        print(data)
-        return data
-    except (ConnectionError, Timeout, TooManyRedirects) as e:
-        print(e)
+#     try:
+#         response = session.get(url, params=parameters)
+#         data = json.loads(response.text)
+#         print(data)
+#         return data
+#     except (ConnectionError, Timeout, TooManyRedirects) as e:
+#         print(e)
 
-@app.get('/exchange/map')
-def get_trades():
+# @app.get('/exchange/map')
+# def get_trades():
 
-    url = 'https://pro-api.coinmarketcap.com/v1/exchange/map'
+#     url = 'https://pro-api.coinmarketcap.com/v1/exchange/map'
 
-    headers = {
-        'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
-    }
+#     headers = {
+#         'Accepts': 'application/json',
+#         'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
+#     }
 
-    session = Session()
-    session.headers.update(headers)
+#     session = Session()
+#     session.headers.update(headers)
 
-    parameters = {
-        # 'id' : 270,
-        # 'slug' : "binance"
-    }
+#     parameters = {
+#         # 'id' : 270,
+#         # 'slug' : "binance"
+#     }
 
-    try:
-        response = session.get(url, params=parameters)
-        data = json.loads(response.text)
-        print(data)
-        return data
-    except (ConnectionError, Timeout, TooManyRedirects) as e:
-        print(e)
+#     try:
+#         response = session.get(url, params=parameters)
+#         data = json.loads(response.text)
+#         print(data)
+#         return data
+#     except (ConnectionError, Timeout, TooManyRedirects) as e:
+#         print(e)
 
-@app.get('/cryptocurrency/listings')
-def get_trades():
+# @app.get('/cryptocurrency/listings')
+# def get_trades():
 
-    url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
+#     url = 'https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest'
 
-    headers = {
-        'Accepts': 'application/json',
-        'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
-    }
+#     headers = {
+#         'Accepts': 'application/json',
+#         'X-CMC_PRO_API_KEY': '0eae5252-5b66-46e0-81d3-93fa6080358f',
+#     }
 
-    session = Session()
-    session.headers.update(headers)
+#     session = Session()
+#     session.headers.update(headers)
 
-    parameters = {
-        # 'id' : 270,
-        # 'slug' : "binance"
-    }
+#     parameters = {
+#         # 'id' : 270,
+#         # 'slug' : "binance"
+#     }
 
-    try:
-        response = session.get(url, params=parameters)
-        data = json.loads(response.text)
-        print(data)
-        return data
-    except (ConnectionError, Timeout, TooManyRedirects) as e:
-        print(e)
+#     try:
+#         response = session.get(url, params=parameters)
+#         data = json.loads(response.text)
+#         print(data)
+#         return data
+#     except (ConnectionError, Timeout, TooManyRedirects) as e:
+#         print(e)
 
-@app.get('/test/{user_id}')
-def send_message(user_id: int):
-    return redis.hgetall('user:'+str(user_id))
+# @app.get('/test/{user_id}')
+# def send_message(user_id: int):
+#     return redis.hgetall('user:'+str(user_id))
 
-@app.get('/find_pairs')
-def find_pairs_optimized():
+# @app.get('/find_pairs')
+# def find_pairs_optimized():
 
-    exchange_values = {
-        "Binance": 1800.5320387732727,
-        "Coinbase": 1800.5320387732727,
-        "Kraken": 1900.5320387732727,
-        "Bitfinex": 1500.5320387732727,
-        "Gemini": 1800.5320387732727
-    }
-    pairs = []
-    stack = []
+#     exchange_values = {
+#         "Binance": 1800.5320387732727,
+#         "Coinbase": 1800.5320387732727,
+#         "Kraken": 1900.5320387732727,
+#         "Bitfinex": 1500.5320387732727,
+#         "Gemini": 1800.5320387732727
+#     }
+#     pairs = []
+#     stack = []
 
-    # exchange_values.items() produce tuples
-    sorted_exchanges = sorted(exchange_values.items(), key=lambda item: item[1])
+#     # exchange_values.items() produce tuples
+#     sorted_exchanges = sorted(exchange_values.items(), key=lambda item: item[1])
 
-    for (exchange, value) in sorted_exchanges:
-        while stack and exchange_values[stack[-1]] < value:
-            i = stack.pop()
-            pairs.append((i, exchange))
+#     for (exchange, value) in sorted_exchanges:
+#         while stack and exchange_values[stack[-1]] < value:
+#             i = stack.pop()
+#             pairs.append((i, exchange))
 
-        stack.append(exchange)
+#         stack.append(exchange)
 
-    result_dict = {}
-    for pair in pairs:
-        value1 = exchange_values[pair[0]]
-        value2 = exchange_values[pair[1]]
-        key = f"{pair[0]},{pair[1]}"
-        result_dict[key] = f"{value1},{value2},{value2-value1}"
+#     result_dict = {}
+#     for pair in pairs:
+#         value1 = exchange_values[pair[0]]
+#         value2 = exchange_values[pair[1]]
+#         key = f"{pair[0]},{pair[1]}"
+#         result_dict[key] = f"{value1},{value2},{value2-value1}"
 
-    print(result_dict)
+#     print(result_dict)
 
-    return 1
+#     return 1
 
 
-@app.get('/solve_format')
-def solve_format():
-    input_data = {'ETH': {'Gemini,Binance': '1722,1800,78'}}
+# @app.get('/solve_format')
+# def solve_format():
+#     input_data = {'ETH': {'Gemini,Binance': '1722,1800,78'}}
 
-    output_data = {}
+#     output_data = {}
 
-    for exchanges, prices in input_data['ETH'].items():
-        exchange_names = exchanges.split(',')
-        prices = prices.split(',')
+#     for exchanges, prices in input_data['ETH'].items():
+#         exchange_names = exchanges.split(',')
+#         prices = prices.split(',')
         
-        for exchange, price in zip(exchange_names, prices):
-            output_data[exchange] = {
-                "name": exchange,
-                "currency": "ETH",
-                "price": price
-            }
+#         for exchange, price in zip(exchange_names, prices):
+#             output_data[exchange] = {
+#                 "name": exchange,
+#                 "currency": "ETH",
+#                 "price": price
+#             }
 
-    print(output_data)
-    return 1
+#     print(output_data)
+#     return 1
